@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ศูนย์รวมข้อมูล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7fa;--card:#fff;--ink:#14293a;--mute:#5d7285;--line:#dbe5ec;--brand:#0e3b5c;--brand2:#1e7fa8;--warn:#fff4dc;--warnink:#7a4b00;--ok:#1f9d63;--bad:#d64545}
+:root[data-theme=dark]{--bg:#0d1a24;--card:#142634;--ink:#e6eef4;--mute:#92a8b8;--line:#243b4c;--brand:#7cc4e6;--brand2:#7cc4e6;--warn:#3a2e12;--warnink:#f5cf86}
+*{box-sizing:border-box}
+body{margin:0;font-family:Sarabun,"Noto Sans Thai",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--brand2);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:var(--brand);color:#fff}
+:root[data-theme=dark] header{background:#0a141c;border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:16px;padding:18px 0;flex-wrap:wrap}
+.logo{font-size:28px}
+.top h1{font-size:22px;margin:0;font-weight:700;flex:1;min-width:180px}
+.top h1 small{display:block;font-size:14px;font-weight:400;opacity:.8}
+.search{flex:1 1 260px;max-width:380px;padding:10px 16px;border-radius:999px;border:0;font:inherit;background:rgba(255,255,255,.95);color:#14293a}
+.theme{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer}
+.alert{background:var(--warn);color:var(--warnink);border-left:6px solid #f2a93b;border-radius:6px;padding:16px 20px;margin:24px 0;display:flex;gap:14px;align-items:flex-start}
+.alert b{display:block;font-size:18px}
+.alert .ic{font-size:26px}
+h2{font-size:20px;margin:36px 0 14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.kpi .n{font-size:30px;font-weight:700;color:var(--brand)}
+.kpi .l{color:var(--mute);font-size:15px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;background:var(--ok)}
+.dot.bad{background:var(--bad)}
+.group{margin-bottom:22px}
+.group h3{font-size:16px;color:var(--mute);margin:0 0 10px;font-weight:500}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.link{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;transition:border-color .15s,transform .15s}
+.link:hover{border-color:var(--brand2);transform:translateY(-2px)}
+.link .ic{font-size:26px;width:44px;height:44px;display:grid;place-items:center;background:var(--bg);border-radius:10px;flex:none}
+.link b{display:block;line-height:1.3}
+.link span{font-size:14px;color:var(--mute);line-height:1.3;display:block}
+.news{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.cover{height:96px;display:grid;place-items:center;font-size:40px;color:#fff}
+.post .body{padding:14px 18px 18px}
+.tag{display:inline-block;font-size:13px;padding:1px 10px;border-radius:999px;background:var(--bg);color:var(--brand);border:1px solid var(--line)}
+.post h4{margin:8px 0 4px;font-size:17px;line-height:1.35}
+.post p{margin:0;color:var(--mute);font-size:15px}
+.post time{display:block;margin-top:10px;font-size:13px;color:var(--mute)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;padding:2px 18px}
+summary{cursor:pointer;padding:12px 0;font-weight:500}
+details p{margin:0 0 14px;color:var(--mute)}
+footer{margin-top:48px;background:var(--brand);color:#fff;padding:28px 0;font-size:15px}
+:root[data-theme=dark] footer{background:#0a141c;border-top:1px solid var(--line)}
+footer .wrap{display:flex;gap:28px;flex-wrap:wrap;justify-content:space-between}
+.empty{display:none;color:var(--mute);padding:12px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <div class="logo" aria-hidden="true">🏢</div>
+    <h1>ศูนย์รวมข้อมูล <small>ลิงก์ ข่าวสาร และคู่มือ ในที่เดียว</small></h1>
+    <input class="search" id="q" type="search" placeholder="ค้นหาลิงก์หรือระบบ" aria-label="ค้นหาลิงก์">
+    <button class="theme" id="theme" type="button">โหมดมืด</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="alert" id="alert" role="status"></div>
+
+  <h2>สถานะวันนี้</h2>
+  <div class="kpis" id="kpis"></div>
+
+  <h2>ลิงก์ที่ใช้บ่อย</h2>
+  <div id="groups"></div>
+  <p class="empty" id="empty">ไม่พบลิงก์ที่ตรงกับคำค้น ลองใช้คำอื่น</p>
+
+  <h2>ข่าวสารและประชาสัมพันธ์</h2>
+  <div class="news" id="news"></div>
+
+  <h2>คู่มือและวิธีแก้ปัญหาเบื้องต้น</h2>
+  <div id="tips"></div>
+
+</main>
+
+<footer>
+  <div class="wrap" id="contact"></div>
+</footer>
+
+<script>
+/* ============ แก้ไขข้อมูลทั้งหมดได้ที่ส่วนนี้ ============ */
+const SITE = {
+  alert: { icon:"📢", title:"ประกาศ: แจ้งปิดปรับปรุงระบบ", text:"วันเสาร์ที่ 18 ตุลาคม 22:00–24:00 น. ระบบอาจใช้งานไม่ได้ชั่วคราว" },
+
+  // ตัวเลขสรุป: ok:false จะแสดงจุดสีแดง
+  kpis: [
+    { label:"ระบบหลัก", value:"ปกติ", status:true },
+    { label:"งานที่แจ้งเดือนนี้", value:"128" },
+    { label:"ปิดงานแล้ว", value:"92%" },
+    { label:"อัปเดตล่าสุด", value:"8 ต.ค. 2569" }
+  ],
+
+  // หมวดลิงก์: icon, ชื่อ, คำอธิบายสั้น, URL
+  groups: [
+    { name:"ระบบงาน", items:[
+      { icon:"🎫", title:"แจ้งปัญหา", desc:"ส่งคำขอความช่วยเหลือ", url:"#" },
+      { icon:"📊", title:"แดชบอร์ด", desc:"ดูสรุปภาพรวม", url:"#" },
+      { icon:"📅", title:"ปฏิทินกิจกรรม", desc:"นัดหมายและกำหนดการ", url:"#" }
+    ]},
+    { name:"เอกสารและแบบฟอร์ม", items:[
+      { icon:"📝", title:"แบบฟอร์มคำขอ", desc:"ขอใช้บริการต่าง ๆ", url:"#" },
+      { icon:"📚", title:"คู่มือการใช้งาน", desc:"ดาวน์โหลดเอกสาร", url:"#" },
+      { icon:"❓", title:"คำถามที่พบบ่อย", desc:"คำตอบเบื้องต้น", url:"#" }
+    ]},
+    { name:"ติดต่อและช่วยเหลือ", items:[
+      { icon:"📞", title:"เบอร์ภายใน", desc:"รายชื่อและเบอร์ติดต่อ", url:"#" },
+      { icon:"✉️", title:"ส่งอีเมล", desc:"support@example.com", url:"mailto:support@example.com" }
+    ]}
+  ],
+
+  // ข่าวสาร: color คือสีแถบหัวการ์ด (ไม่ต้องใช้รูปภาพ)
+  news: [
+    { tag:"ประกาศ", icon:"🔔", color:"#1e7fa8", title:"เปิดให้บริการช่องทางแจ้งปัญหาใหม่", text:"แจ้งปัญหาได้ผ่านแบบฟอร์มออนไลน์ ติดตามสถานะได้ตลอดเวลา", date:"8 ต.ค. 2569" },
+    { tag:"เคล็ดลับ", icon:"💡", color:"#1f9d63", title:"3 วิธีเพิ่มความปลอดภัยให้บัญชีของคุณ", text:"ตั้งรหัสผ่านให้ยาวขึ้น เปิดการยืนยันตัวตนสองชั้น และไม่แชร์รหัสกับผู้อื่น", date:"3 ต.ค. 2569" },
+    { tag:"กิจกรรม", icon:"🎉", color:"#8a5cc2", title:"อบรมการใช้งานระบบสำหรับพนักงานใหม่", text:"ลงทะเบียนล่วงหน้าได้ที่ลิงก์ในหน้านี้ จำนวนจำกัด", date:"28 ก.ย. 2569" }
+  ],
+
+  tips: [
+    { q:"อินเทอร์เน็ตใช้ไม่ได้ ต้องทำอย่างไร", a:"ตรวจสอบสายสัญญาณหรือ Wi-Fi จากนั้นลองเปิดเว็บอื่น หากยังไม่ได้ให้แจ้งเบอร์ภายในด้านล่าง" },
+    { q:"ลืมรหัสผ่าน", a:"กดลิงก์ 'ลืมรหัสผ่าน' ที่หน้าเข้าสู่ระบบ หรือแจ้งผู้ดูแลเพื่อรีเซ็ตให้" },
+    { q:"เครื่องพิมพ์ไม่ออกงาน", a:"ตรวจสอบกระดาษและสถานะเครื่อง ลบคิวงานค้าง แล้วสั่งพิมพ์ใหม่อีกครั้ง" }
+  ],
+
+  contact: [
+    { h:"ติดต่อเรา", t:"โทรภายใน 1234<br>support@example.com" },
+    { h:"เวลาทำการ", t:"จันทร์–ศุกร์ 08:30–17:30 น." },
+    { h:"สถานที่", t:"ชั้น 2 อาคารสำนักงาน" }
+  ]
+};
+/* ============ จบส่วนข้อมูล ============ */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+$("alert").innerHTML = `<span class="ic">${SITE.alert.icon}</span><div><b>${esc(SITE.alert.title)}</b>${esc(SITE.alert.text)}</div>`;
+
+$("kpis").innerHTML = SITE.kpis.map(k =>
+  `<div class="kpi"><div class="n">${k.status===undefined?"":`<span class="dot${k.status?"":" bad"}"></span>`}${esc(k.value)}</div><div class="l">${esc(k.label)}</div></div>`).join("");
+
+$("groups").innerHTML = SITE.groups.map(g =>
+  `<section class="group"><h3>${esc(g.name)}</h3><div class="links">` +
+  g.items.map(i => `<a class="link" href="${esc(i.url)}" data-k="${esc((i.title+" "+i.desc).toLowerCase())}"><span class="ic" aria-hidden="true">${i.icon}</span><div><b>${esc(i.title)}</b><span>${esc(i.desc)}</span></div></a>`).join("") +
+  `</div></section>`).join("");
+
+$("news").innerHTML = SITE.news.map(n =>
+  `<article class="post"><div class="cover" style="background:${n.color}" aria-hidden="true">${n.icon}</div><div class="body"><span class="tag">${esc(n.tag)}</span><h4>${esc(n.title)}</h4><p>${esc(n.text)}</p><time>${esc(n.date)}</time></div></article>`).join("");
+
+$("tips").innerHTML = SITE.tips.map(t => `<details><summary>${esc(t.q)}</summary><p>${esc(t.a)}</p></details>`).join("");
+$("contact").innerHTML = SITE.contact.map(c => `<div><b>${esc(c.h)}</b><br>${c.t}</div>`).join("");
+
+// ค้นหา
+$("q").addEventListener("input", e => {
+  const v = e.target.value.trim().toLowerCase();
+  let total = 0;
+  document.querySelectorAll(".group").forEach(g => {
+    let shown = 0;
+    g.querySelectorAll(".link").forEach(l => {
+      const hit = !v || l.dataset.k.includes(v);
+      l.style.display = hit ? "" : "none";
+      if (hit) shown++;
+    });
+    g.style.display = shown ? "" : "none";
+    total += shown;
+  });
+  $("empty").style.display = total ? "none" : "block";
+});
+
+// โหมดมืด
+const root = document.documentElement, btn = $("theme");
+function setTheme(t){ root.dataset.theme = t; btn.textContent = t==="dark" ? "โหมดสว่าง" : "โหมดมืด"; try{ localStorage.setItem("theme", t); }catch(e){} }
+let saved = null; try{ saved = localStorage.getItem("theme"); }catch(e){}
+setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+btn.addEventListener("click", () => setTheme(root.dataset.theme==="dark" ? "light" : "dark"));
+</script>
+</body>
+</html>
